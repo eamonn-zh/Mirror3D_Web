@@ -11,17 +11,14 @@
     </v-app-bar>
 
     <v-row justify="center">
+
       <v-card elevation="5" class="my-10 px-4 pt-7" width="90%" max-width="1550" ref="rel_obj">
-        <h3 class="grey--text px-4">Dataset Visualization</h3>
+
         <v-row justify="space-between" align="center" class="px-4">
-          <v-col xl="6" lg="6" md="6" sm="12" cols="12">
-            <p class="grey--text" style="font-size: 13px">Note:
-              <b>Sample ID</b>: Image id (image name without extension) of a sample.
-              <b>Mask Overlay</b>: The mirror mask is shown as a transparent polygon on the RGB image. We provide coarse and precise mirror masks for each instance.
-              <b>Video</b>: Top-down view and front view of the point cloud. The refined mirror area is colored in dark blue.
-            </p>
+          <v-col>
+            <h3 class="mb-2" style="font-size: 22px; color: #333">Dataset Visualization</h3>
           </v-col>
-          <v-col xl="4" lg="4" md="5" sm="12" cols="12">
+          <v-col xl="5" lg="6" md="6" sm="12" cols="12">
             <v-text-field
                 v-model="search"
                 clearable
@@ -51,25 +48,80 @@
           </v-col>
           <v-spacer></v-spacer>
           <v-col cols="auto">
-            <v-menu transition="scale-transition" v-model="menu" :close-on-content-click="false" :nudge-width="200" open-on-hover top offset-y>
+            <v-dialog
+                v-model="dialog"
+                max-width="700">
               <template v-slot:activator="{ on, attrs }">
-                <v-btn color="#333" dark v-bind="attrs" v-on="on"><v-icon left>mdi-speedometer</v-icon>Playback Speed</v-btn>
+                <v-btn color="#333" dark v-bind="attrs" v-on="on">
+                  <v-icon left>mdi-help-circle-outline</v-icon>
+                  Description
+                </v-btn>
+              </template>
+              <v-card>
+                <v-card-title class="text-h6">
+                  Description
+                </v-card-title>
+                <v-card-text class="mb-0 pb-0" style="line-height: 27px">
+                  <b>Sample ID</b>: Image id (image name without extension) of a sample.<br/>
+                  <b>Scene / House ID</b>: Scene / House id of the sample.<br/>
+                  <b>Mirror Visibility</b>: Partial / Almost whole / Whole<br/>
+                  <b>Mask Overlay</b>: The mirror mask is shown as a transparent polygon on the RGB image. We provide coarse and precise mirror masks for each instance.<br/>
+                  <b>Video</b>: Front view and top-down view of the point cloud. The refined mirror area is colored in dark blue.</v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                      text
+                      @click="dialog = false">
+                    OK
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+
+          </v-col>
+          <v-col cols="auto">
+            <v-menu transition="scale-transition" v-model="menu" :close-on-content-click="false" :nudge-width="200"
+                    open-on-hover top offset-y>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn color="#333" dark v-bind="attrs" v-on="on">
+                  <v-icon left>mdi-speedometer</v-icon>
+                  Playback Speed
+                </v-btn>
               </template>
               <v-card class="px-5 pt-9 pb-4">
-                <v-slider color="#333" label="Speed" track-color="gray" thumb-size="24" thumb-label="always" v-model="videoPlaySpeed" hide-details min="0.1" max="3" step="0.1"></v-slider>
+                <v-slider color="#333" label="Speed" track-color="gray" thumb-size="24" thumb-label="always"
+                          v-model="videoPlaySpeed" hide-details min="0.1" max="3" step="0.1"></v-slider>
               </v-card>
             </v-menu>
           </v-col>
           <v-col cols="auto">
             <v-btn color="#333" dark :outlined="playBtn" @click="playOrPauseAllVideos">
               <v-icon left>
-                {{playBtn ? "mdi-pause" : "mdi-play"}}
+                {{ playBtn ? "mdi-pause" : "mdi-play" }}
               </v-icon>
-              {{playBtn ? "PAUSE ALL" : "PLAY ALL"}}
+              {{ playBtn ? "PAUSE ALL" : "PLAY ALL" }}
             </v-btn>
           </v-col>
-
         </v-row>
+
+<!--          <v-alert-->
+<!--              transition="fade-transition"-->
+<!--              class="mx-4 mb-5"-->
+<!--              dismissible-->
+<!--              dense-->
+<!--              style="font-size: 13px;"-->
+<!--              outlined-->
+<!--              border="left"-->
+<!--              colored-border-->
+<!--              color="#333">-->
+<!--            <b>Sample ID</b>: Image id (image name without extension) of a sample.<br/>-->
+<!--            <b>Scene / House ID</b>: Scene / House id of the sample.<br/>-->
+<!--            <b>Mirror Visibility</b>: Partial / Almost whole / Whole<br/>-->
+<!--            <b>Mask Overlay</b>: The mirror mask is shown as a transparent polygon on the RGB image. We provide coarse-->
+<!--            and precise mirror masks for each instance.<br/>-->
+<!--            <b>Video</b>: Front view and top-down view of the point cloud. The refined mirror area is colored in dark-->
+<!--            blue.-->
+<!--          </v-alert>-->
         <v-data-table
             mobile-breakpoint="0"
             :loading="isTableLoading"
@@ -86,27 +138,33 @@
             <v-tooltip bottom :color="tooltipColor">
               <template v-slot:activator="{ on, attrs }">
                 <div>
-                  <span v-bind="attrs" v-on="on" v-on:mouseout="resetTooltipText" @click="copyID(item.id)">{{ item.id }}</span>
-                  <p class="mt-2">(Instance ID: {{item.instanceID}})</p>
+                  <span v-bind="attrs" v-on="on" v-on:mouseout="resetTooltipText" @click="copyID(item.id)">{{
+                      item.id
+                    }}</span>
+                  <p class="mt-2">(Instance ID: {{ item.instanceID }})</p>
                 </div>
               </template>
-              <span>{{tooltipText}}</span>
+              <span>{{ tooltipText }}</span>
             </v-tooltip>
           </template>
           <template v-slot:item.label="{ item }">
             <v-chip small :color="getColor(item.label)" text-color="white">{{ item.label }}</v-chip>
           </template>
           <template v-slot:item.coarseOverlay="{ item }">
-            <img class="my-5 custom_img" :src="item.coarseOverlay" alt="Coarse mask overlay" :style="{width: imgWidth}"/>
+            <img class="my-5 custom_img" :src="item.coarseOverlay" alt="Coarse mask overlay"
+                 :style="{width: imgWidth}"/>
           </template>
           <template v-slot:item.preciseOverlay="{ item }">
-            <img class="my-5 custom_img" :src="item.preciseOverlay" alt="Precise mask overlay" :style="{width: imgWidth}"/>
+            <img class="my-5 custom_img" :src="item.preciseOverlay" alt="Precise mask overlay"
+                 :style="{width: imgWidth}"/>
           </template>
           <template v-slot:item.video1="{item}">
-            <video @mouseenter="pauseCurrentVideo($event)" @mouseleave="playCurrentVideo($event)" autoplay class="my-5 custom_video" :src="item.video1" loop muted controls :style="{width: imgHeight}"/>
+            <video @mouseenter="pauseCurrentVideo($event)" @mouseleave="playCurrentVideo($event)" autoplay
+                   class="my-5 custom_video" :src="item.video1" loop muted controls :style="{width: imgHeight}"/>
           </template>
           <template v-slot:item.video2="{item}">
-            <video @mouseenter="pauseCurrentVideo($event)" @mouseleave="playCurrentVideo($event)" autoplay class="my-5 custom_video" :src="item.video2" loop muted controls :style="{width: imgHeight}"/>
+            <video @mouseenter="pauseCurrentVideo($event)" @mouseleave="playCurrentVideo($event)" autoplay
+                   class="my-5 custom_video" :src="item.video2" loop muted controls :style="{width: imgHeight}"/>
           </template>
         </v-data-table>
       </v-card>
@@ -119,6 +177,7 @@
 export default {
   data() {
     return {
+      dialog: false,
       selectedDataset: "Matterport3D",
       isTableLoading: true,
       tooltipText: 'Click to Copy Sample ID',
@@ -397,28 +456,30 @@ export default {
 }
 </script>
 <style>
-  .custom_img {
-    object-fit: contain;
-  }
-  .v-data-table > .v-data-table__wrapper > table > tbody > tr > td, .v-data-table > .v-data-table__wrapper > table > thead > tr > td, .v-data-table > .v-data-table__wrapper > table > tfoot > tr > td {
-    font-size: 0.75rem !important;
-    height: 48px;
-  }
-  /**{*/
-  /*  -webkit-touch-callout:none;*/
-  /*  -webkit-user-select:none;*/
-  /*  -khtml-user-select:none;*/
-  /*  -moz-user-select:none;*/
-  /*  -ms-user-select:none;*/
-  /*  user-select:none;*/
-  /*}*/
-  /*input{*/
-  /*  -webkit-user-select:auto;*/
-  /*}*/
-  /*textarea{*/
-  /*  -webkit-user-select:auto;*/
-  /*}*/
-  .text-wrapper {
-    white-space: pre-wrap;
-  }
+.custom_img {
+  object-fit: contain;
+}
+
+.v-data-table > .v-data-table__wrapper > table > tbody > tr > td, .v-data-table > .v-data-table__wrapper > table > thead > tr > td, .v-data-table > .v-data-table__wrapper > table > tfoot > tr > td {
+  font-size: 0.75rem !important;
+  height: 48px;
+}
+
+/**{*/
+/*  -webkit-touch-callout:none;*/
+/*  -webkit-user-select:none;*/
+/*  -khtml-user-select:none;*/
+/*  -moz-user-select:none;*/
+/*  -ms-user-select:none;*/
+/*  user-select:none;*/
+/*}*/
+/*input{*/
+/*  -webkit-user-select:auto;*/
+/*}*/
+/*textarea{*/
+/*  -webkit-user-select:auto;*/
+/*}*/
+.text-wrapper {
+  white-space: pre-wrap;
+}
 </style>
