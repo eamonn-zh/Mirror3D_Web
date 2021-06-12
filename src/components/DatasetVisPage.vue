@@ -63,8 +63,8 @@
                 </v-card-title>
                 <v-card-text class="mb-0 pb-0" style="line-height: 27px">
                   <b>Sample ID</b>: Image id (image name without extension) of a sample.<br/>
-                  <b>Scene / House ID</b>: Scene / House id of the sample.<br/>
-                  <b>Mirror Visibility</b>: Partial / Almost whole / Whole<br/>
+                  <b>Scene / House ID</b>: Scene / House id of a sample.<br/>
+                  <b>Mirror Visibility</b>: Partial / Almost-whole / Whole<br/>
                   <b>Mask Overlay</b>: The mirror mask is shown as a transparent polygon on the RGB image. We provide coarse and precise mirror masks for each instance.<br/>
                   <b>Video</b>: Front view and top-down view of the point cloud. The refined mirror area is colored in dark blue.</v-card-text>
                 <v-card-actions>
