@@ -464,22 +464,4 @@ export default {
   font-size: 0.75rem !important;
   height: 48px;
 }
-
-/**{*/
-/*  -webkit-touch-callout:none;*/
-/*  -webkit-user-select:none;*/
-/*  -khtml-user-select:none;*/
-/*  -moz-user-select:none;*/
-/*  -ms-user-select:none;*/
-/*  user-select:none;*/
-/*}*/
-/*input{*/
-/*  -webkit-user-select:auto;*/
-/*}*/
-/*textarea{*/
-/*  -webkit-user-select:auto;*/
-/*}*/
-.text-wrapper {
-  white-space: pre-wrap;
-}
 </style>
