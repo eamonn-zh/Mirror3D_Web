@@ -1,5 +1,5 @@
 {
-  "name": "untitled1",
+  "name": "mirror3d",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
+    "prerender-spa-plugin": "^3.4.0",
     "vue": "^2.6.11",
     "vue-clipboard2": "^0.3.1",
     "vue-router": "^3.5.1",

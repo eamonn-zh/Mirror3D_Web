@@ -274,7 +274,7 @@
                  src="https://aspis.cmpt.sfu.ca/projects/mirrors/mirror3d_zip_release/mirror3d_paper_stack.jpeg"
                  max-width="230px"></v-img>
           <a style="font-size: 20px;" class="font-weight-bold"
-             href="https://aspis.cmpt.sfu.ca/projects/mirrors/mirror3d_zip_release/Mirror3D__Depth_Refinement_for_Mirror_Surfaces.pdf">[Paper]</a>
+             href="https://arxiv.org/pdf/2106.06629.pdf">[Paper]</a>
           <span style="color: #005cbf;" class="font-weight-bold mx-4"> | </span>
           <a style="font-size: 20px" class="font-weight-bold"
              href="https://aspis.cmpt.sfu.ca/projects/mirrors/mirror3d_zip_release/Mirror3D_CVPR_poster.pdf">[Poster]</a>
@@ -283,7 +283,6 @@
       <v-col cols="12" sm="8" md="8" lg="8" xl="8">
         <div>
           <span style="color: #005cbf; font-size: 20px" class="font-weight-bold">Bibtex</span>
-          <!--          <pre style="font-size: 13px; line-height: 1.4; background: #eee; border-radius: 5px;" class="pa-5 mt-3 mb-6">@inproceedings{mirror3d2021tan,<br>author = {Tan, Jiaqi and Lin, Weijie and Chang, Angel X and<br>Savva, Manolis},<br>title = {{Mirror3D}: Depth Refinement for Mirror Surfaces},<br>booktitle = {Proceedings of the IEEE Conference on Computer Vision<br>and Pattern Recognition (CVPR)},<br>month = {June},<br>year = {2021}<br>}</pre>-->
 
           <v-sheet @mouseover="showCopyBtn = true;" @mouseleave="resetCopyBtn" class="pa-2 mt-3 mb-6" color="#eee"
                    rounded style="line-height: 1.4; font-size: 13px; font-family: monospace; font-weight: 300;">
